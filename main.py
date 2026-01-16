@@ -82,7 +82,7 @@
 # time.sleep(7)
 # alert.accept()
 
-# ********************Select multiple checkboxes ,select using conditions********************
+# **************Select multiple checkboxes ,select using conditions,get attribute********
 
 # from selenium import webdriver
 # from selenium.webdriver.common.by import By
@@ -107,7 +107,7 @@
 #     if checkboxes.index(checkbox)+1 != 2: #+1 is used to start checking  using 1 instead of 0 to match the index of the checkbox.
 #         checkbox.click()
  
-# **************Handle static dropdowns and dynamic dropdowns*****************
+# **************Handle static dropdowns*****************
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -120,11 +120,13 @@ options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(options=options)
 driver.maximize_window()
 driver.get("https://rahulshettyacademy.com/AutomationPractice/")
-static_dropdown = driver.find_element(By.ID, "dropdown-class-example")
-select = Select(static_dropdown)
-select.select_by_index(1)
-time.sleep(3)
-select.select_by_visible_text("Option2")
-time.sleep(3)
-select.select_by_value("option3")
-time.sleep(3)
+# static_dropdown = driver.find_element(By.ID, "dropdown-class-example")
+# select = Select(static_dropdown)
+# select.select_by_index(1)
+# time.sleep(3)
+# select.select_by_visible_text("Option2")
+# time.sleep(3)
+# select.select_by_value("option3")
+# time.sleep(3)
+
+# **************Handle dynamic dropdowns*****************
