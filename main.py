@@ -84,25 +84,47 @@
 
 # ********************Select multiple checkboxes ,select using conditions********************
 
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.get("https://rahulshettyacademy.com/AutomationPractice/")
+# # for i in range(1, 4):
+# #     driver.find_element(By.XPATH, f"//input[@value='option{i}']").click()
+
+# # checkboxes = driver.find_elements(By.XPATH, "(//input[starts-with(@name, 'checkBoxOption')])[position()<3]") #use elements when we have to find multiple elements. position()<3 means first 2 elements.
+# # print(len(checkboxes))
+# # for checkbox in checkboxes:
+# #     print(checkbox.get_attribute("value")) #get_attribute used to get value of the attribute.
+# #     checkbox.click()
+
+# # if we wanna not to check all checkboxes then we can use the following code
+# checkboxes = driver.find_elements(By.XPATH, "//input[starts-with(@name, 'checkBoxOption')]") 
+# print(len(checkboxes))
+# for checkbox in checkboxes:
+#     if checkboxes.index(checkbox)+1 != 2: #+1 is used to start checking  using 1 instead of 0 to match the index of the checkbox.
+#         checkbox.click()
+ 
+# **************Handle static dropdowns and dynamic dropdowns*****************
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.select import Select
+import time
+
 options = Options()
 options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(options=options)
+driver.maximize_window()
 driver.get("https://rahulshettyacademy.com/AutomationPractice/")
-# for i in range(1, 4):
-#     driver.find_element(By.XPATH, f"//input[@value='option{i}']").click()
-
-# checkboxes = driver.find_elements(By.XPATH, "(//input[starts-with(@name, 'checkBoxOption')])[position()<3]") #use elements when we have to find multiple elements. position()<3 means first 2 elements.
-# print(len(checkboxes))
-# for checkbox in checkboxes:
-#     print(checkbox.get_attribute("value")) #get_attribute used to get value of the attribute.
-#     checkbox.click()
-
-# if we wanna not to check all checkboxes then we can use the following code
-checkboxes = driver.find_elements(By.XPATH, "//input[starts-with(@name, 'checkBoxOption')]") 
-print(len(checkboxes))
-for checkbox in checkboxes:
-    if checkboxes.index(checkbox)+1 != 2:
-        checkbox.click()
+static_dropdown = driver.find_element(By.ID, "dropdown-class-example")
+select = Select(static_dropdown)
+select.select_by_index(1)
+time.sleep(3)
+select.select_by_visible_text("Option2")
+time.sleep(3)
+select.select_by_value("option3")
+time.sleep(3)
