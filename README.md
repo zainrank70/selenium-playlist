@@ -78,6 +78,24 @@ This practice page includes various automation scenarios:
 - **select_by_value()** - Select option by value attribute
 - **driver.maximize_window()** - Maximize browser window for better visibility
 
+#### 8. Dynamic Dropdowns / Autocomplete (Lines 132-165)
+- **Dynamic Dropdowns** - Dropdowns that populate based on user input (e.g., search suggestions)
+- **Wait for suggestions** - Use `wait.until(EC.presence_of_element_located(...))` before finding dropdown options
+- **find_elements() with loops** - Find all suggestions and iterate through them
+- **Conditional selection** - Use `if "keyword" in option.text.lower()` to find matching options
+- **enumerate()** - Get index and element when looping: `for index, option in enumerate(options)`
+- **Break on match** - Use `break` to stop iteration after clicking desired option
+- **Real-world example** - Flipkart search autocomplete with dynamic suggestions
+
+#### 9. Login Automation (Lines 167-204)
+- **Element Click Interception** - Handle overlays/modals that block clicks
+- **element_to_be_clickable()** - Wait for element to be both present and clickable
+- **scrollIntoView()** - Scroll element into view before clicking: `driver.execute_script("arguments[0].scrollIntoView(true);", element)`
+- **JavaScript click fallback** - Use `driver.execute_script("arguments[0].click();", element)` if regular click fails
+- **Form filling** - Enter username and password in login forms
+- **Wait for form elements** - Use explicit waits for form fields to load after navigation
+- **Submit forms** - Click submit buttons with proper waits
+
 ### Important Notes
 
 - **Quotes**: Use double quotes for ID, NAME, CLASS_NAME, LINK_TEXT, PARTIAL_LINK_TEXT, TAG_NAME, and CSS_SELECTOR. Use single quotes for XPath.
@@ -88,6 +106,9 @@ This practice page includes various automation scenarios:
 - **Waits**: Use `WebDriverWait` with `expected_conditions` instead of `time.sleep()` when possible for better reliability.
 - **find_elements() vs find_element()**: Use `find_elements()` (plural) to get a list when multiple elements match, `find_element()` (singular) returns only the first match.
 - **Select Class**: Always use Selenium's `Select` class for `<select>` dropdowns rather than clicking options directly.
+- **Dynamic Dropdowns**: Always wait for suggestions to appear before finding elements. Use `wait.until(EC.presence_of_element_located(...))` before calling `find_elements()`.
+- **Element Click Interception**: If clicks are intercepted by overlays, use `element_to_be_clickable()`, `scrollIntoView()`, or JavaScript click as fallback.
+- **String Matching in Loops**: Remember to use quotes for strings when checking: `if "keyword" in text.lower()` not `if keyword in text.lower()`.
 
 ### Setup
 
@@ -117,12 +138,16 @@ pip install selenium
 
 ### Usage
 
-Run the main script (currently demonstrates static dropdown handling):
+All code examples are currently commented out. To run a specific example:
+
+1. Uncomment the desired section in `main.py`
+2. Ensure all required imports are included
+3. Run the script:
 ```bash
 python main.py
 ```
 
-To test other strategies, uncomment the relevant sections in `main.py` and comment out the current active code.
+**Example**: To test dynamic dropdown handling, uncomment the "Handle dynamic dropdowns flipkart" section (lines 132-165) and run the script.
 
 ### Code Structure
 
@@ -132,6 +157,8 @@ The `main.py` file is organized into commented sections:
 3. **XPath** - Various XPath strategies (basic, text-based, functions, navigation)
 4. **SendKeys & Alert Handling** - Input manipulation and alert interactions
 5. **Checkbox Selection** - Multiple checkbox handling with conditions
-6. **Dropdown Handling** - Static and dynamic dropdown selection (currently active)
+6. **Static Dropdown Handling** - Select class for standard dropdowns
+7. **Dynamic Dropdowns** - Autocomplete/suggestion dropdowns with wait strategies
+8. **Login Automation** - Form filling, handling click interceptions, and form submission
 
 Each section contains commented-out example code that can be activated by uncommenting and ensuring the required imports are included.
