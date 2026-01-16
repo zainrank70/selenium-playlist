@@ -55,5 +55,54 @@
 # # driver.find_element(By.XPATH, "(//div[@id='radio-btn-example']//input[starts-with(@value, 'radio')])[last()]").click() #find the element by last child of the parent id radio-btn-example using starts-with to match radio1, radio2, radio3.
 # driver.find_element(By.XPATH, "(//input[@value='radio3']/ancestor::div[@id]//input)[2]").click() #ancestor used for finding from child to parent to grand parent to find the element.
 
+# *********SendKeys, Click, Get and Clear Input Text, Alert Handling, Wait Time,**************
 
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+# import time
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.get("https://rahulshettyacademy.com/AutomationPractice/")
+# # Store input element in variable to avoid finding it multiple times
+# name_input = driver.find_element(By.XPATH, "//input[@id='name']")
+# name_input.send_keys("Ch")
+# name_input.clear()
+# name_input.send_keys("Zain")
+# alert_example = driver.find_element(By.XPATH, "//legend[text()='Switch To Alert Example']")
+# print(alert_example.text) #.text is used to get the text of the element.
+# driver.find_element(By.ID, "alertbtn").click()
+# # Wait for alert to appear (wait up to 3 seconds)
+# wait = WebDriverWait(driver, 3)
+# alert = wait.until(EC.alert_is_present()) #Ec means expected conditions to be met.
+# # Wait 7 seconds after alert appears, then accept it
+# time.sleep(7)
+# alert.accept()
 
+# ********************Select multiple checkboxes ,select using conditions********************
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+options = Options()
+options.add_experimental_option("detach", True)
+driver = webdriver.Chrome(options=options)
+driver.get("https://rahulshettyacademy.com/AutomationPractice/")
+# for i in range(1, 4):
+#     driver.find_element(By.XPATH, f"//input[@value='option{i}']").click()
+
+# checkboxes = driver.find_elements(By.XPATH, "(//input[starts-with(@name, 'checkBoxOption')])[position()<3]") #use elements when we have to find multiple elements. position()<3 means first 2 elements.
+# print(len(checkboxes))
+# for checkbox in checkboxes:
+#     print(checkbox.get_attribute("value")) #get_attribute used to get value of the attribute.
+#     checkbox.click()
+
+# if we wanna not to check all checkboxes then we can use the following code
+checkboxes = driver.find_elements(By.XPATH, "//input[starts-with(@name, 'checkBoxOption')]") 
+print(len(checkboxes))
+for checkbox in checkboxes:
+    if checkboxes.index(checkbox)+1 != 2:
+        checkbox.click()
