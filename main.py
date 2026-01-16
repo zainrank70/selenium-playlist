@@ -38,22 +38,22 @@
 #**************************XPATH**************************
 #we use double quotes for id, name, class name, link text, partial link text, tag name and single quotes for xpath and we use square brackets for attributes @ show that it is an attribute.
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-options = Options()
-options.add_experimental_option("detach", True)
-driver = webdriver.Chrome(options=options)
-driver.get("https://rahulshettyacademy.com/AutomationPractice/")
-# driver.find_element(By.XPATH, "//input[@value='radio2']").click()
-# driver.find_element(By.XPATH, "//legend[text()='Suggession Class Example']").click()
-# driver.find_element(By.XPATH, "//input[starts-with(@value, 'rad')]").click() #we need it when we have to click multiple elements 1 by 1 but we don't know the exact value of the element.
-# driver.find_element(By.XPATH, "//input[contains(@value, 'adio')]").click() #contains used when we have to find the element by partial text.
-# driver.find_element(By.XPATH, "//legend[contains(text(), 'Class Example')]").click() #find the element by partial text.
-driver.find_element(By.XPATH, "//div[@id='radio-btn-example']/fieldset/label[@for='radio3']/input").click() #find the element by parent id and child for attribute to reach our goal of unique element.
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.get("https://rahulshettyacademy.com/AutomationPractice/")
+# # driver.find_element(By.XPATH, "//input[@value='radio2']").click()
+# # driver.find_element(By.XPATH, "//legend[text()='Suggession Class Example']").click()
+# # driver.find_element(By.XPATH, "//input[starts-with(@value, 'rad')]").click() #we need it when we have to click multiple elements 1 by 1 but we don't know the exact value of the element.
+# # driver.find_element(By.XPATH, "//input[contains(@value, 'adio')]").click() #contains used when we have to find the element by partial text.
+# # driver.find_element(By.XPATH, "//legend[contains(text(), 'Class Example')]").click() #find the element by partial text. #contains used when we don't know the exact text of the element and it is dynamically generated.
+# # # driver.find_element(By.XPATH, "//div[@id='radio-btn-example']/fieldset/label[@for='radio3']/input").click() #find the element by parent id and child for attribute to reach our goal of unique element.
+# # driver.find_element(By.XPATH, "/html//body//select[@id='dropdown-class-example']//option[@value='option2']").click() #find the element by absolute xpath single slash means absolute to the root element and we can use // slashes for staring matching at any element to the grand child instead of direct childs.
+# # driver.find_element(By.XPATH, "(//div[@id='radio-btn-example']//input[starts-with(@value, 'radio')])[last()]").click() #find the element by last child of the parent id radio-btn-example using starts-with to match radio1, radio2, radio3.
+# driver.find_element(By.XPATH, "(//input[@value='radio3']/ancestor::div[@id]//input)[2]").click() #ancestor used for finding from child to parent to grand parent to find the element.
 
 
-
-# contains use when we don't know the exact text of the element and it is dynamically generated.
-# we use double slashes for relative xpath (relative mean it is relative to the current element) and single slash for absolute xpath (absolute mean it is absolute to the root element).
 
