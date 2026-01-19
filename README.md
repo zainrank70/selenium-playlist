@@ -107,6 +107,26 @@ This practice page includes various automation scenarios:
 - **Other methods**: `double_click()`, `drag_and_drop()`, `drag_and_drop_by_offset()`, `key_down()`, `key_up()`
 - **Simple click**: For regular clicks, `move_to_element()` is not needed - click automatically moves to element
 
+#### 11. Multiple Tabs and Windows Handling (Lines 400-425)
+- **New Window** - Opens a separate browser window (different process/window)
+  - Visual: Separate window with its own title bar and controls
+  - Use case: When you need isolated browser sessions
+  - Example: Clicking a link that opens in a new window
+- **New Tab** - Opens a new tab within the same browser window
+  - Visual: New tab in the same window, shares title bar
+  - Use case: Multiple pages in the same window
+  - Example: Clicking a link that opens in a new tab
+- **window_handles** - List of all open window/tab handles: `driver.window_handles` (returns list)
+- **switch_to.window()** - Switch control between windows/tabs: `driver.switch_to.window(handle)`
+- **current_window_handle** - Get current window/tab handle: `driver.current_window_handle`
+- **Key Differences**: 
+  - Windows = Separate browser windows (different UI windows)
+  - Tabs = Same browser window, different tabs
+  - Both use the same `window_handles` system in Selenium
+- **Important**: Always switch to the new window/tab after opening it to interact with it
+- **Switching**: Use `driver.switch_to.window(window_handles[index])` to switch between any window or tab
+- **Note**: There's no separate `.tab()` method - use `.window()` for both tabs and windows in Selenium tabs and windows
+
 ### Important Notes
 
 - **Quotes**: Use double quotes for ID, NAME, CLASS_NAME, LINK_TEXT, PARTIAL_LINK_TEXT, TAG_NAME, and CSS_SELECTOR. Use single quotes for XPath.
@@ -122,6 +142,8 @@ This practice page includes various automation scenarios:
 - **String Matching in Loops**: Remember to use quotes for strings when checking: `if "keyword" in text.lower()` not `if keyword in text.lower()`.
 - **ActionChains**: Always call `.perform()` at the end of action chains to execute actions. Order matters - hover first to reveal dropdowns before clicking options.
 - **Implicit vs Explicit Waits**: Use `implicitly_wait()` for global waits, but prefer explicit waits (`WebDriverWait`) for specific elements as they're more reliable.
+- **Windows vs Tabs**: In Selenium, both new windows and new tabs are tracked in `window_handles`. Use `driver.switch_to.window(handle)` to switch between them. There's no separate `.tab()` method - use `.window()` for both.
+- **Window Switching**: Always switch to the new window/tab after opening it to interact with its content. Get all handles with `driver.window_handles` and switch using index.
 
 ### Setup
 
@@ -176,6 +198,7 @@ The `main.py` file is organized into commented sections:
 9. **Implicit Wait** - Global wait strategy with poll frequency
 10. **Explicit Wait** - Condition-based waits with custom poll frequency
 11. **Common Exceptions** - StaleElementReferenceException, NoSuchElementException, ElementClickInterceptedException
-12. **ActionChains & Mouse Hover** - Advanced mouse actions and hover automation (currently active)
+12. **ActionChains & Mouse Hover** - Advanced mouse actions and hover automation
+13. **Multiple Tabs and Windows** - Handling multiple browser windows and tabs with window_handles (currently active)
 
 Each section contains commented-out example code that can be activated by uncommenting and ensuring the required imports are included.

@@ -379,6 +379,26 @@
 # key_up is used to press the key up.
 # in simple click we dont need move_to_element we can directly click the element it automatically move to the element and click it.
 
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.common.exceptions import NoSuchElementException
+# from selenium.webdriver.common.action_chains import ActionChains
+
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.maximize_window()
+# driver.get("https://www.flipkart.com/")
+
+# actions = ActionChains(driver,duration=2000) #duration is used to set the duration of the action in milliseconds of mouse speed.
+# actions.move_to_element(driver.find_element(By.XPATH, "//img[@alt='Dropdown with more help links']")).perform() #first we open the element dropdown to see the options.
+# actions.move_to_element(driver.find_element(By.XPATH, "//a[@title='Notification Preferences']")).click().perform() #then we click the notification preferences link. this order matters because if we click the link without opening the dropdown first it will not work.
+
+#  ******************* Multiple Tabs and Windows Handling ************************
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -386,13 +406,20 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
-
+import time
 options = Options()
 options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(options=options)
-driver.maximize_window()
-driver.get("https://www.flipkart.com/")
 
-actions = ActionChains(driver,duration=2000) #duration is used to set the duration of the action in milliseconds of mouse speed.
-actions.move_to_element(driver.find_element(By.XPATH, "//img[@alt='Dropdown with more help links']")).perform() #first we open the element dropdown to see the options.
-actions.move_to_element(driver.find_element(By.XPATH, "//a[@title='Notification Preferences']")).click().perform() #then we click the notification preferences link. this order matters because if we click the link without opening the dropdown first it will not work.
+driver.maximize_window()
+driver.get("https:/rahulshettyacademy.com/AutomationPractice/")
+print(driver.window_handles)
+driver.find_element(By.ID, "openwindow").click() #A separate browser window
+time.sleep(3)
+print(driver.window_handles)
+driver.find_element(By.ID, "opentab").click() #A new tab within the same browser window
+time.sleep(3)
+print(driver.window_handles)
+driver.switch_to.window(driver.window_handles[1]) #Switch to the new tab by index of window_handles list but use .window there is no .tab methodthere
+driver.find_element(By.XPATH, "//div[@id]//a[contains(@href,'/blog')]").click()
+
