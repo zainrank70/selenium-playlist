@@ -125,7 +125,20 @@ This practice page includes various automation scenarios:
   - Both use the same `window_handles` system in Selenium
 - **Important**: Always switch to the new window/tab after opening it to interact with it
 - **Switching**: Use `driver.switch_to.window(window_handles[index])` to switch between any window or tab
-- **Note**: There's no separate `.tab()` method - use `.window()` for both tabs and windows in Selenium tabs and windows
+- **Note**: There's no separate `.tab()` method - use `.window()` for both tabs and windows in Selenium
+
+#### 12. iFrame Handling (Lines 426-448)
+- **iFrame/Frames** - Nested HTML documents within the main page (iframe, frame, frameset tags)
+- **switch_to.frame()** - Switch to an iframe to access elements inside it: `driver.switch_to.frame(frame_element)`
+- **switch_to.default_content()** - Switch back to the main HTML document from iframe
+- **Finding frame element** - Find frame first, then switch: `frame_element = driver.find_element(By.ID, "frame-id")`
+- **Key Points**:
+  - Frames have their own separate HTML body and DOM
+  - Cannot access frame elements without switching into the frame first
+  - Cannot access main document elements while inside a frame
+  - Must switch back to `default_content()` to interact with main document elements
+- **Common Error**: "Element not interactable" occurs when trying to access main document elements while inside a frame
+- **Workflow**: Switch to frame → Interact with frame elements → Switch to default_content → Interact with main document tabs and windows
 
 ### Important Notes
 
@@ -144,6 +157,7 @@ This practice page includes various automation scenarios:
 - **Implicit vs Explicit Waits**: Use `implicitly_wait()` for global waits, but prefer explicit waits (`WebDriverWait`) for specific elements as they're more reliable.
 - **Windows vs Tabs**: In Selenium, both new windows and new tabs are tracked in `window_handles`. Use `driver.switch_to.window(handle)` to switch between them. There's no separate `.tab()` method - use `.window()` for both.
 - **Window Switching**: Always switch to the new window/tab after opening it to interact with its content. Get all handles with `driver.window_handles` and switch using index.
+- **iFrame Handling**: Always switch to frame before accessing frame elements, then switch back to `default_content()` to access main document elements. Elements are not accessible across frame boundaries.
 
 ### Setup
 
@@ -199,6 +213,7 @@ The `main.py` file is organized into commented sections:
 10. **Explicit Wait** - Condition-based waits with custom poll frequency
 11. **Common Exceptions** - StaleElementReferenceException, NoSuchElementException, ElementClickInterceptedException
 12. **ActionChains & Mouse Hover** - Advanced mouse actions and hover automation
-13. **Multiple Tabs and Windows** - Handling multiple browser windows and tabs with window_handles (currently active)
+13. **Multiple Tabs and Windows** - Handling multiple browser windows and tabs with window_handles
+14. **iFrame Handling** - Switching to frames and back to default content (currently active)
 
 Each section contains commented-out example code that can be activated by uncommenting and ensuring the required imports are included.

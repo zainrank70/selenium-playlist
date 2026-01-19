@@ -399,6 +399,32 @@
 
 #  ******************* Multiple Tabs and Windows Handling ************************
 
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.common.exceptions import NoSuchElementException
+# from selenium.webdriver.common.action_chains import ActionChains
+# import time
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+
+# driver.maximize_window()
+# driver.get("https:/rahulshettyacademy.com/AutomationPractice/")
+# print(driver.window_handles)
+# driver.find_element(By.ID, "openwindow").click() #A separate browser window
+# time.sleep(3)
+# print(driver.window_handles)
+# driver.find_element(By.ID, "opentab").click() #A new tab within the same browser window
+# time.sleep(3)
+# print(driver.window_handles)
+# driver.switch_to.window(driver.window_handles[1]) #Switch to the new tab by index of window_handles list but use .window there is no .tab methodthere
+# driver.find_element(By.XPATH, "//div[@id]//a[contains(@href,'/blog')]").click()
+
+# ******************* Frames Handling ************************
+# frames has its own html body ,tag name like iframe, frame, frame set etc.
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -410,16 +436,14 @@ import time
 options = Options()
 options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(options=options)
-
 driver.maximize_window()
-driver.get("https:/rahulshettyacademy.com/AutomationPractice/")
-print(driver.window_handles)
-driver.find_element(By.ID, "openwindow").click() #A separate browser window
+driver.get("https://rahulshettyacademy.com/AutomationPractice/")
+frame_element = driver.find_element(By.ID, "courses-iframe")
+driver.switch_to.frame(frame_element) #we switched to frame to access the element inside the frame.
 time.sleep(3)
-print(driver.window_handles)
-driver.find_element(By.ID, "opentab").click() #A new tab within the same browser window
-time.sleep(3)
-print(driver.window_handles)
-driver.switch_to.window(driver.window_handles[1]) #Switch to the new tab by index of window_handles list but use .window there is no .tab methodthere
-driver.find_element(By.XPATH, "//div[@id]//a[contains(@href,'/blog')]").click()
+driver.find_element("xpath", "//a[@href='consulting']").click()
+
+# Now when let say outside the frame in main html document we want to enter the value in the name field we need to switch to the default content otherwise it give error like element not interactable.
+driver.switch_to.default_content()
+driver.find_element("xpath", "//input[@id='name']").send_keys("zainulrehman")
 
