@@ -204,3 +204,163 @@
 # submit_button.click()
 
 
+#***********************implicit wait(it check just element present in dom not check display status of the element*************
+# import time
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.maximize_window()
+# driver.implicitly_wait(3.5) #it is used to wait for the element to be loaded for 5 seconds if element found in 2 seconds it exetcute and dont wait thats the main benefit of implicit wait and good pratice instead of time.sleep() but drawback is it will wait for the element to be loaded for 5 seconds and execute rest of the code without condition checking etc so we need to use explicit wait in that case.
+# driver.get("https://www.flipkart.com/")
+# # time.sleep(2)
+# # Try to close popup if it exists (popup may not always appear)
+# try:
+#     driver.find_element(By.XPATH, "//button[text()='x']").click()
+# except:
+#     try:
+#         driver.find_element(By.XPATH, "//button[text()='✕']").click()
+#     except:
+#         print("No popup found, continuing...")
+# search_box = driver.find_element(By.XPATH, "//input[@type='text']")
+# search_box.send_keys("one plus")
+# # time.sleep(2)
+# dropdown_options = driver.find_elements(By.XPATH, "(//form[contains(@class,'header-form-search')]//a)")
+# for index, option in enumerate(dropdown_options):
+#     print(option.get_attribute("href"))
+#     print(option.text)
+#     if "headphones" in option.text.lower():
+#         option.click()
+#         break
+
+#***********************Explicit wait*************************
+import time
+from selenium import webdriver
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+options = Options()
+options.add_experimental_option("detach", True)
+driver = webdriver.Chrome(options=options)
+driver.maximize_window()
+driver.get("https://www.flipkart.com/") 
+#3rd parameter poll frequency is 0.5 seconds by default so it will recheck after 0.5 seconds if element is not found it will wait for 10 seconds and if element is found it will click on it but if still not found it will raise TimeoutException.
+# Try to close popup if it exists (popup may not always appear)
+try:
+    WebDriverWait(driver, 2, 0.2).until(EC.visibility_of_element_located(("xpath", "//button[text()='x']")))
+    login_popup_close_button = driver.find_element("xpath", "//button[text()='x']")
+    login_popup_close_button.click()
+except:
+    print("No popup found, continuing...")
+search_box = driver.find_element("xpath", "//input[@type='text']")
+search_box.send_keys("one plus")
+WebDriverWait(driver, 2, 0.2).until(EC.presence_of_all_elements_located(("xpath", "(//form[contains(@class,'header-form-search')]//a)")))
+dropdown_options = driver.find_elements("xpath", "(//form[contains(@class,'header-form-search')]//a)")
+for index, option in enumerate(dropdown_options):
+    print(f"link present in {index+1} option: {option.get_attribute('href')}")
+    print(f"text present in {index+1} option: {option.text}")
+    if "bullets" in option.text:
+        option.click()
+        break
+else:
+    print("options not found!")
+
+
+# ***********************Common Selenium Exceptions & Solutions*************************
+
+# 1. StaleElementReferenceException
+# EXPLANATION: Occurs when you store an element reference, but the DOM changes (refresh, navigation, JS updates),
+# making the stored reference invalid. The element exists, but your reference to it is "stale".
+# SOLUTION: Always re-find elements after any DOM changes like page refresh or navigation.
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.common.exceptions import StaleElementReferenceException
+# 
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.get("https://example.com")
+# 
+# # ❌ WRONG: Element reference becomes stale after DOM changes
+# # search_box = driver.find_element(By.ID, "search")
+# # driver.refresh()  # Page refreshes - DOM changes
+# # search_box.send_keys("test")  # ❌ StaleElementReferenceException
+# 
+# # ✅ CORRECT: Re-find element after DOM changes
+# search_box = driver.find_element(By.ID, "search")
+# driver.refresh()
+# search_box = driver.find_element(By.ID, "search")  # Re-find fresh reference
+# search_box.send_keys("test")  # ✅ Works correctly
+
+
+# 2. NoSuchElementException
+# EXPLANATION: Raised when Selenium cannot find an element on the page. Common causes: element not loaded yet,
+# wrong locator, element in iframe, or element doesn't exist. Most common timing issue - element appears after script runs.
+# SOLUTION: Use explicit waits (WebDriverWait) to wait for element to appear, or fix the locator if element doesn't exist.
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.common.exceptions import NoSuchElementException
+# 
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.get("https://example.com")
+# 
+# # ❌ WRONG: Element might not be loaded yet
+# # driver.find_element(By.ID, "non-existent-id").click()  # ❌ NoSuchElementException
+# 
+# # ✅ CORRECT: Use explicit wait to wait for element
+# wait = WebDriverWait(driver, 10)
+# try:
+#     element = wait.until(EC.presence_of_element_located((By.ID, "my-id")))  # Wait for element
+#     element.click()  # ✅ Element found and clickable
+# except NoSuchElementException:
+#     print("Element not found even after waiting")
+
+
+# 3. ElementClickInterceptedException
+# EXPLANATION: Element exists and is found, but another element (overlay, modal, banner) is covering it, making it unclickable.
+# The click is "intercepted" by the overlapping element. Common with popups, cookie banners, or loading spinners.
+# SOLUTION: Close overlay first, scroll element into view, use element_to_be_clickable wait, or use JavaScript click.
+# from selenium import webdriver
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.common.exceptions import ElementClickInterceptedException
+# 
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.get("https://example.com")
+# wait = WebDriverWait(driver, 10)
+# 
+# # ❌ WRONG: Element exists but is covered by overlay/modal
+# # login_button = driver.find_element(By.ID, "login-btn")
+# # login_button.click()  # ❌ ElementClickInterceptedException
+# 
+# # ✅ CORRECT: Multiple solutions
+# 
+# # Solution 1: Close overlay/modal first
+# try:
+#     close_modal = driver.find_element(By.ID, "close-modal")
+#     close_modal.click()
+# except:
+#     pass
+# 
+# # Solution 2: Wait for clickable and scroll into view
+# login_button = wait.until(EC.element_to_be_clickable((By.ID, "login-btn")))
+# driver.execute_script("arguments[0].scrollIntoView(true);", login_button)
+# login_button.click()
+# 
+# # Solution 3: Use JavaScript click (bypasses interception)
+# # login_button = driver.find_element(By.ID, "login-btn")
+# # driver.execute_script("arguments[0].click();", login_button)  # ✅ JavaScript click works
