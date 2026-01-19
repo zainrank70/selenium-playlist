@@ -237,37 +237,39 @@
 #         break
 
 #***********************Explicit wait*************************
-import time
-from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-options = Options()
-options.add_experimental_option("detach", True)
-driver = webdriver.Chrome(options=options)
-driver.maximize_window()
-driver.get("https://www.flipkart.com/") 
-#3rd parameter poll frequency is 0.5 seconds by default so it will recheck after 0.5 seconds if element is not found it will wait for 10 seconds and if element is found it will click on it but if still not found it will raise TimeoutException.
-# Try to close popup if it exists (popup may not always appear)
-try:
-    WebDriverWait(driver, 2, 0.2).until(EC.visibility_of_element_located(("xpath", "//button[text()='x']")))
-    login_popup_close_button = driver.find_element("xpath", "//button[text()='x']")
-    login_popup_close_button.click()
-except:
-    print("No popup found, continuing...")
-search_box = driver.find_element("xpath", "//input[@type='text']")
-search_box.send_keys("one plus")
-WebDriverWait(driver, 2, 0.2).until(EC.presence_of_all_elements_located(("xpath", "(//form[contains(@class,'header-form-search')]//a)")))
-dropdown_options = driver.find_elements("xpath", "(//form[contains(@class,'header-form-search')]//a)")
-for index, option in enumerate(dropdown_options):
-    print(f"link present in {index+1} option: {option.get_attribute('href')}")
-    print(f"text present in {index+1} option: {option.text}")
-    if "bullets" in option.text:
-        option.click()
-        break
-else:
-    print("options not found!")
+# we can also use until not to wait for the element to be not present in the dom.
+
+# import time
+# from selenium import webdriver
+# from selenium.webdriver.support.wait import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.common.by import By
+# options = Options()
+# options.add_experimental_option("detach", True)
+# driver = webdriver.Chrome(options=options)
+# driver.maximize_window()
+# driver.get("https://www.flipkart.com/") 
+# #3rd parameter poll frequency is 0.5 seconds by default so it will recheck after 0.5 seconds if element is not found it will wait for 10 seconds and if element is found it will click on it but if still not found it will raise TimeoutException.
+# # Try to close popup if it exists (popup may not always appear)
+# try:
+#     WebDriverWait(driver, 2, 0.2).until(EC.visibility_of_element_located(("xpath", "//button[text()='x']")))
+#     login_popup_close_button = driver.find_element("xpath", "//button[text()='x']")
+#     login_popup_close_button.click()
+# except:
+#     print("No popup found, continuing...")
+# search_box = driver.find_element("xpath", "//input[@type='text']")
+# search_box.send_keys("one plus")
+# WebDriverWait(driver, 2, 0.2).until(EC.presence_of_all_elements_located(("xpath", "(//form[contains(@class,'header-form-search')]//a)")))
+# dropdown_options = driver.find_elements("xpath", "(//form[contains(@class,'header-form-search')]//a)")
+# for index, option in enumerate(dropdown_options):
+#     print(f"link present in {index+1} option: {option.get_attribute('href')}")
+#     print(f"text present in {index+1} option: {option.text}")
+#     if "bullets" in option.text:
+#         option.click()
+#         break
+# else:
+#     print("options not found!")
 
 
 # ***********************Common Selenium Exceptions & Solutions*************************
@@ -364,3 +366,33 @@ else:
 # # Solution 3: Use JavaScript click (bypasses interception)
 # # login_button = driver.find_element(By.ID, "login-btn")
 # # driver.execute_script("arguments[0].click();", login_button)  # ✅ JavaScript click works
+
+# **************************Action Chains*************************
+# move_to_element is used to move the mouse to the element(Hovering),when you call perform() the events are fired in the order they are queued up.
+# click is used to click the element.
+# send_keys is used to send keys to the element.
+# context_click is used to right click the element.
+# double_click is used to double click the element.
+# drag_and_drop is used to drag and drop the element.
+# drag_and_drop_by_offset is used to drag and drop the element by offset.
+# key_down is used to press the key down.
+# key_up is used to press the key up.
+# in simple click we dont need move_to_element we can directly click the element it automatically move to the element and click it.
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.action_chains import ActionChains
+
+options = Options()
+options.add_experimental_option("detach", True)
+driver = webdriver.Chrome(options=options)
+driver.maximize_window()
+driver.get("https://www.flipkart.com/")
+
+actions = ActionChains(driver,duration=2000) #duration is used to set the duration of the action in milliseconds.
+actions.move_to_element(driver.find_element(By.XPATH, "//img[@alt='Dropdown with more help links']")).perform() #first we open the element dropdown to see the options.
+actions.move_to_element(driver.find_element(By.XPATH, "//a[@title='Notification Preferences']")).click().perform() #then we click the notification preferences link. this order matters because if we click the link without opening the dropdown first it will not work.
