@@ -393,6 +393,6 @@ driver = webdriver.Chrome(options=options)
 driver.maximize_window()
 driver.get("https://www.flipkart.com/")
 
-actions = ActionChains(driver,duration=2000) #duration is used to set the duration of the action in milliseconds.
+actions = ActionChains(driver,duration=2000) #duration is used to set the duration of the action in milliseconds of mouse speed.
 actions.move_to_element(driver.find_element(By.XPATH, "//img[@alt='Dropdown with more help links']")).perform() #first we open the element dropdown to see the options.
 actions.move_to_element(driver.find_element(By.XPATH, "//a[@title='Notification Preferences']")).click().perform() #then we click the notification preferences link. this order matters because if we click the link without opening the dropdown first it will not work.
